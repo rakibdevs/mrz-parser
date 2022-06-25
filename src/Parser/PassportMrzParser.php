@@ -57,7 +57,6 @@ class PassportMrzParser implements ParserInterface
         return $this;
     }
 
-
     /**
      * Second row first 9 character	alpha+num+<	Passport number
      */

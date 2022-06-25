@@ -272,7 +272,7 @@ trait CountryMapper
         "XCO" => "Common Market for Eastern and Southern Africa",
         "XEC" => "Economic Community of West African States",
         "EUE" => "European Union",
-        "D"   => "Germany",
+        "D" => "Germany",
         "XPO" => "International Criminal Police Organization (Interpol)",
         "IMO" => "International Maritime Organisation",
         "RKS" => "Kosovo",
