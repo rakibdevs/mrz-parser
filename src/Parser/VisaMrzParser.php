@@ -57,7 +57,6 @@ class VisaMrzParser implements ParserInterface
         return $this;
     }
 
-
     /**
      * Second row first 9 character	alpha+num+<	Visa number
      */

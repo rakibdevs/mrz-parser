@@ -81,7 +81,6 @@ class TravelDocument1MrzParser implements ParserInterface
         };
     }
 
-
     /**
      * Get Document Number
      * 6–14	alpha+num+<	Document number

@@ -77,7 +77,6 @@ class TravelDocument2MrzParser implements ParserInterface
         };
     }
 
-
     /**
      * Get Document Number
      * 1-9	alpha+num+<	Document number
