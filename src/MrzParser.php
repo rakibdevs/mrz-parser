@@ -6,6 +6,7 @@ use Rakibdevs\MrzParser\Enums\DocumentType;
 use Rakibdevs\MrzParser\Exceptions\NotSupportedException;
 use Rakibdevs\MrzParser\Parser\PassportMrzParser;
 use Rakibdevs\MrzParser\Parser\TravelDocument1MrzParser;
+use Rakibdevs\MrzParser\Parser\TravelDocument2MrzParser;
 use Rakibdevs\MrzParser\Parser\VisaMrzParser;
 
 class MrzParser
@@ -32,6 +33,9 @@ class MrzParser
                 break;
             case DocumentType::TRAVEL_DOCUMENT_1:
                 $this->adapter = new TravelDocument1MrzParser();
+                break;
+            case DocumentType::TRAVEL_DOCUMENT_2:
+                $this->adapter = new TravelDocument2MrzParser();
                 break;
         }
 

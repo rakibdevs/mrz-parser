@@ -83,7 +83,7 @@ class ValidateDocument
      */
     protected function isTravelDocument2(): bool
     {
-        if ($this->rows == 2 && in_array($this->firstCharacter, ["I", "P", "A", "C"]) && $this->characterCountOfRow == 30) {
+        if ($this->rows == 2 && in_array($this->firstCharacter, ["I", "P", "A", "C"]) && $this->characterCountOfRow == 36) {
             $this->documentType = DocumentType::TRAVEL_DOCUMENT_2;
 
             return true;
