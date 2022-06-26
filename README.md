@@ -29,35 +29,34 @@ var_dump($data);
 ```
 
 ## Supported Document
-#### (Passport (TD3)) [https://www.icao.int/publications/Documents/9303_p4_cons_en.pdf]
+#### [Passport (TD3)](https://www.icao.int/publications/Documents/9303_p4_cons_en.pdf)
+```
 P<UTOERIKSSON<<ANNA<MARIA<<<<<<<<<<<<<<<<<<<
 L898902C36UTO7408122F1204159ZE184226B<<<<<10
-
-#### (Visa) [https://www.icao.int/publications/Documents/9303_p7_cons_en.pdf]
+```
+#### [Visa](https://www.icao.int/publications/Documents/9303_p7_cons_en.pdf)
+```
 V<UTOERIKSSON<<ANNA<MARIA<<<<<<<<<<<<<<<<<<<
 L8988901C4XXX F96121096ZE184226B<<<<<<
-
+```
 Or
-
+```
 V<UTOERIKSSON<<ANNA<MARIA<<<<<<<<<<<
 L8988901C4XXX F9612109<<<<<<<<
-
-#### (Travel Document (TD1)) [https://www.icao.int/publications/Documents/9303_p5_cons_en.pdf]
+```
+#### [Travel Document (TD1)](https://www.icao.int/publications/Documents/9303_p5_cons_en.pdf)
+```
 I<UTOD231458907<<<<<<<<<<<<<<<
 7408122F1204159UTO<<<<<<<<<<<6
 ERIKSSON<<ANNA<MARIA<<<<<<<<<<
+```
 
-#### (Travel Document (TD2)) [https://www.icao.int/publications/Documents/9303_p6_cons_en.pdf]
+#### [Travel Document (TD2)](https://www.icao.int/publications/Documents/9303_p6_cons_en.pdf)
+```
 I<UTOERIKSSON<<ANNA<MARIA<<<<<<<<<<<
 D231458907UTO7408122F1204159<<<<<<<6
-
-
-
-## Testing
-
-```bash
-composer test
 ```
+
 
 ## Changelog
 
