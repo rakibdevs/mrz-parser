@@ -31,12 +31,15 @@ class MrzParser
                 break;
             case DocumentType::VISA:
                 $this->adapter = new VisaMrzParser();
+
                 break;
             case DocumentType::TRAVEL_DOCUMENT_1:
                 $this->adapter = new TravelDocument1MrzParser();
+
                 break;
             case DocumentType::TRAVEL_DOCUMENT_2:
                 $this->adapter = new TravelDocument2MrzParser();
+
                 break;
         }
 
