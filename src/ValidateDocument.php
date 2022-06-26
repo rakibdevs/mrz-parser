@@ -110,7 +110,7 @@ class ValidateDocument
     {
         $this->setProperties();
 
-        if (!$this->isValid()) {
+        if (! $this->isValid()) {
             throw new InvalidFormatException("The given input format is invalid!");
         }
 

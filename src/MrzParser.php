@@ -27,6 +27,7 @@ class MrzParser
         switch ($this->documentType) {
             case DocumentType::PASSPORT:
                 $this->adapter = new PassportMrzParser();
+
                 break;
             case DocumentType::VISA:
                 $this->adapter = new VisaMrzParser();
