@@ -5,6 +5,7 @@ namespace Rakibdevs\MrzParser;
 use Rakibdevs\MrzParser\Enums\DocumentType;
 use Rakibdevs\MrzParser\Exceptions\NotSupportedException;
 use Rakibdevs\MrzParser\Parser\PassportMrzParser;
+use Rakibdevs\MrzParser\Parser\VisaMrzParser;
 
 class MrzParser
 {
@@ -24,6 +25,9 @@ class MrzParser
         switch ($this->documentType) {
             case DocumentType::PASSPORT:
                 $this->adapter = new PassportMrzParser();
+                break;
+            case DocumentType::VISA:
+                $this->adapter = new VisaMrzParser();
                 break;
         }
 
