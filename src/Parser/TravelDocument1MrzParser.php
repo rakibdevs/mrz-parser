@@ -62,9 +62,29 @@ class TravelDocument1MrzParser implements ParserInterface
         return $this;
     }
 
+    /**
+     * Get Type beased on first two string
+     *
+     * Type, This is at the discretion of the issuing state or authority,
+     * but 1–2 should be AC for Crew Member Certificates and V is not allowed as 2nd character.
+     * ID or I< are typically used for nationally issued ID cards and IP for passport cards.
+     */
+    protected function getType()
+    {
+        $firstTwoCharacter = substr($this->firstLine, 0, 2);
+
+        return match ($firstTwoCharacter) {
+            'AC' => 'Crew Member Certificates',
+            'I<' => 'National ID',
+            'IP' => 'Passport',
+            default => "Travel Document (TD1)"
+        };
+    }
+
 
     /**
-     * Second row first 9 character	alpha+num+<	Document number
+     * Get Document Number
+     * 6–14	alpha+num+<	Document number
      */
     protected function getCardNo(): ?string
     {
@@ -152,7 +172,7 @@ class TravelDocument1MrzParser implements ParserInterface
     protected function get(): array
     {
         return [
-            'type' => 'Official Travel Document',
+            'type' => $this->getType(),
             'card_no' => $this->getCardNo(),
             'issuer' => $this->getIssuer(),
             'date_of_expiry' => $this->getDateOfExpiry(),
