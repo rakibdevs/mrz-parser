@@ -3,6 +3,7 @@
 namespace Rakibdevs\MrzParser;
 
 use Rakibdevs\MrzParser\Enums\DocumentType;
+use Rakibdevs\MrzParser\Exceptions\NotSupportedException;
 use Rakibdevs\MrzParser\Parser\PassportMrzParser;
 
 class MrzParser
@@ -38,6 +39,10 @@ class MrzParser
 
     protected function get(): ?array
     {
+        if (empty($this->adapter)) {
+            throw new NotSupportedException("This format is not supported yet!");
+        }
+
         return $this->adapter->parse($this->text);
     }
 
