@@ -107,7 +107,7 @@ class PassportMrzParser implements ParserInterface
      */
     protected function getFirstName(): ?string
     {
-        return isset($this->nameString[1]) ? chop($this->nameString[1], "<") : null;
+        return isset($this->nameString[1]) ? str_replace('<', ' ', chop($this->nameString[1], "<")) : null;
     }
 
     /**
