@@ -89,7 +89,7 @@ Please review [our security policy](../../security/policy) on how to report secu
 - [Md. Rakibul Islam](https://github.com/rakibdevs)
 - [All Contributors](../../contributors)
 
-Special thanks to @tetrahydra for organised country list, @Al Amin for help extracting information.
+Special thanks to [tetrahydra](https://github.com/tetrahydra) for organised country list, [Al Amin](https://github.com/al-amindev) for help extracting information.
 
 ## License
 
