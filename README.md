@@ -27,6 +27,21 @@ SPECIMEN<<SVEN<<<<<<<<<<<<<<<<');
 
 var_dump($data);
 ```
+## Output
+```json
+{
+    "type": "Passport",
+    "card_no": "L898902C3",
+    "issuer": "Utopian",
+    "date_of_expiry": "2012-04-15",
+    "first_name": "ANNA MARIA",
+    "last_name": "ERIKSSON",
+    "date_of_birth": "1974-08-12",
+    "gender": "Female",
+    "personal_number": "ZE184226B",
+    "nationality": "Utopian"
+}
+```
 
 ## Supported Document
 #### [Passport (TD3)](https://www.icao.int/publications/Documents/9303_p4_cons_en.pdf)
