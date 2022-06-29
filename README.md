@@ -21,9 +21,8 @@ composer require rakibdevs/mrz-parser
 use Rakibdevs\MrzParser\MrzParser;
 .....
 .....
-$data = MrzParser::parse('I<SWE59000002<8198703142391<<<
-8703145M1701027SWE<<<<<<<<<<<8
-SPECIMEN<<SVEN<<<<<<<<<<<<<<<<');
+$data = MrzParser::parse('P<UTOERIKSSON<<ANNA<MARIA<<<<<<<<<<<<<<<<<<<
+L898902C36UTO7408122F1204159ZE184226B<<<<<10');
 
 var_dump($data);
 ```
