@@ -17,7 +17,6 @@ trait DateFormatter
     public function formatDate($date, $format = "Y-m-d"): ?string
     {
         if ($this->validateDateFormat($date)) {
-
             $dateTime = DateTime::createFromFormat('ymd', $date);
 
             return $dateTime->format($format);
