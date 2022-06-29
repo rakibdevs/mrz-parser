@@ -62,7 +62,7 @@ class VisaMrzParser implements ParserInterface
      */
     protected function getCardNo(): ?string
     {
-        $cardNo = substr($this->firstLine, 0, 9);
+        $cardNo = substr($this->secondLine, 0, 9);
         $cardNo = chop($cardNo, "<"); // remove extra '<' from card no
 
         return $cardNo;
@@ -107,7 +107,7 @@ class VisaMrzParser implements ParserInterface
      */
     protected function getFirstName(): ?string
     {
-        return isset($this->nameString[1]) ? chop($this->nameString[1], "<") : null;
+        return isset($this->nameString[1]) ? str_replace('<', ' ', chop($this->nameString[1], "<")) : null;
     }
 
     /**
