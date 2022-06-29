@@ -37,12 +37,12 @@ L898902C36UTO7408122F1204159ZE184226B<<<<<10
 #### [Visa](https://www.icao.int/publications/Documents/9303_p7_cons_en.pdf)
 ```
 V<UTOERIKSSON<<ANNA<MARIA<<<<<<<<<<<<<<<<<<<
-L8988901C4XXX F96121096ZE184226B<<<<<<
+L8988901C4XXX7408122F96121096ZE184226B<<<<<<
 ```
 Or
 ```
 V<UTOERIKSSON<<ANNA<MARIA<<<<<<<<<<<
-L8988901C4XXX F9612109<<<<<<<<
+L8988901C4XXX7408122F9612109<<<<<<<<
 ```
 #### [Travel Document (TD1)](https://www.icao.int/publications/Documents/9303_p5_cons_en.pdf)
 ```
