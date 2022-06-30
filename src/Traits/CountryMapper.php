@@ -305,6 +305,12 @@ trait CountryMapper
         "GBS" => "United Kingdom of Great Britain and Northern Ireland Subject", // British Subject
     ];
 
+    /**
+     * Map country name based on code
+     *
+     * @param string|null $code
+     * @return string|null
+     */
     public function mapCountry(string $code = null): ?string
     {
         $allCountry = array_merge(

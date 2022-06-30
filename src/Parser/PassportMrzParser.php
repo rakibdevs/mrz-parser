@@ -26,6 +26,9 @@ class PassportMrzParser implements ParserInterface
      *
      * PTUNKKONI<<MARTINA<<<<<<<<<<<<<<<<<<<<<<<<<<
      * K0503499<8UNK9701241F06022201170650553<<<<10
+     *
+     * @param string $text
+     * @return self
      */
     protected function setText(string $text): self
     {
@@ -36,6 +39,8 @@ class PassportMrzParser implements ParserInterface
 
     /**
      * Set Name String
+     *
+     * @return self
      */
     protected function setNameString(): self
     {
@@ -46,6 +51,8 @@ class PassportMrzParser implements ParserInterface
 
     /**
      * Extract information
+     *
+     * @return self
      */
     protected function extract(): self
     {
@@ -59,6 +66,8 @@ class PassportMrzParser implements ParserInterface
 
     /**
      * Second row first 9 character	alpha+num+<	Passport number
+     *
+     * @return null|string
      */
     protected function getCardNo(): ?string
     {
@@ -70,6 +79,8 @@ class PassportMrzParser implements ParserInterface
 
     /**
      * Get Passport Issuer
+     *
+     * @return null|string
      */
     protected function getIssuer(): ?string
     {
@@ -81,6 +92,8 @@ class PassportMrzParser implements ParserInterface
     /**
      * Get Date of Expiry
      * Second row 22–27	character: (YYMMDD)
+     *
+     * @return null|string
      */
     protected function getDateOfExpiry(): ?string
     {
@@ -92,6 +105,8 @@ class PassportMrzParser implements ParserInterface
     /**
      * Get Date of Birth
      * Second row 14–19	character: (YYMMDD)
+     *
+     * @return null|string
      */
     protected function getDateOfBirth(): ?string
     {
@@ -102,8 +117,9 @@ class PassportMrzParser implements ParserInterface
 
     /**
      * Get First Name from Name String
+     * For Ex, MARTINA<<<<<<<<<<<<<<<<<<<<<<<<<<
      *
-     * MARTINA<<<<<<<<<<<<<<<<<<<<<<<<<<
+     * @return null|string
      */
     protected function getFirstName(): ?string
     {
@@ -113,6 +129,7 @@ class PassportMrzParser implements ParserInterface
     /**
      * Get Last Name from Name String
      *
+     * @return null|string
      */
     protected function getLastName(): ?string
     {
@@ -120,8 +137,9 @@ class PassportMrzParser implements ParserInterface
     }
 
     /**
-     * Get Gender
-     * Position 21, M/F/<
+     * Get Gender from Position 21, M/F/<
+     *
+     * @return null|string
      *
      */
     protected function getGender(): ?string
@@ -131,8 +149,9 @@ class PassportMrzParser implements ParserInterface
 
     /**
      * Get Personal Number
-     *
      * 29–42 alpha+num+< (may be used by the issuing country as it desires)
+     *
+     * @return null|string
      */
     protected function getPersonalNumber(): ?string
     {
@@ -141,6 +160,8 @@ class PassportMrzParser implements ParserInterface
 
     /**
      * Get Nationality
+     *
+     * @return null|string
      */
     protected function getNationality(): ?string
     {
