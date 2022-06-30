@@ -2,6 +2,15 @@
 
 All notable changes to `mrz-parser` will be documented in this file.
 
+## v1.2.0 - 2022-06-30
+
+**Full Changelog**: https://github.com/rakibdevs/mrz-parser/compare/v1.1.0...v1.2.0
+
+1. Fixed Card No and First Name "<" Issue in Visa b292c6a
+2. Added Semantic Versioning
+
+Special Thanks to @sohelamin for the Review.
+
 ## v1.1.0 - 2022-06-29
 
 ### What's Changed
