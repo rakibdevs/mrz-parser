@@ -2,7 +2,7 @@
 
 All notable changes to `mrz-parser` will be documented in this file.
 
-## v1.1 - 2022-06-29
+## v1.1.0 - 2022-06-29
 
 ### What's Changed
 
@@ -16,6 +16,6 @@ All notable changes to `mrz-parser` will be documented in this file.
 
 **Full Changelog**: https://github.com/rakibdevs/mrz-parser/compare/v1.0...v1.1
 
-## v1.0 - 2022-06-26
+## v1.0.0 - 2022-06-26
 
 Extract information from Machine Readable Zone data for Passport, Visa, and Other Travel Documents.
