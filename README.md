@@ -2,7 +2,7 @@
 # MRZ (Machine Readable Zones) Parser for PHP
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/rakibdevs/mrz-parser.svg?style=flat-square)](https://packagist.org/packages/rakibdevs/mrz-parser)
-[![Tests](https://github.com/rakibdevs/mrz-parser/actions/workflows/run-tests.yml/badge.svg?branch=main)](https://github.com/rakibdevs/mrz-parser/actions/workflows/run-tests.yml)
+
 
 A PHP package for MRZ (Machine Readable Zones) code parser for Passport, Visa & Travel Document (TD1 & TD2).
 
