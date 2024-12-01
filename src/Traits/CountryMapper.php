@@ -282,14 +282,14 @@ trait CountryMapper
 
     /**
      * UNK = Travel document issued by the United Nations Interim Administration Mission in Kosovo (UNMIK) for Resident of Kosovo
-     * XAA = Stateless person, as per the 1954 Convention Relating to the Status of Stateless Persons
+     * XXA = Stateless person, as per the 1954 Convention Relating to the Status of Stateless Persons
      * XXB = Refugee, as per the 1951 Convention Relating to the Status of Refugees
      */
     protected $unitedNations = [
         "UNK" => "United Nations Interim Administration Mission in Kosovo (UNMIK)",
         "UNO" => "United Nations Organization Official",
         "UNA" => "United Nations Organization Specialized Agency Official",
-        "XAA" => "Stateless (per Article 1 of 1954 convention)",
+        "XXA" => "Stateless (per Article 1 of 1954 convention)",
         "XXB" => "Refugee (per Article 1 of 1951 convention, amended by 1967 protocol)",
         "XXC" => "Refugee (non-convention)",
         "XXX" => "Unspecified Nationality / Unknown",
