@@ -96,13 +96,35 @@ class ValidateDocument
     }
 
     /**
+     * French national ID (legacy Carte Nationale d'Identité)
+     * 2 rows, 36 characters each, first line starts with 'IDFRA'.
+     *
+     * Checked before TD2 because it also starts with 'I' and is 2x36, but has
+     * a bespoke field layout.
+     */
+    protected function isFrenchId(): bool
+    {
+        if ($this->rows === 2 && $this->characterCountOfRow === 36 && str_starts_with($this->text, 'IDFRA')) {
+            $this->documentType = DocumentType::FRENCH_ID;
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * Validate Document Based on Structure
      *
      * Reference: https://en.wikipedia.org/wiki/Machine-readable_passport
      */
     protected function isValid(): bool
     {
-        return $this->isPassport() || $this->isVisa() || $this->isTravelDocument1() || $this->isTravelDocument2();
+        return $this->isPassport()
+            || $this->isVisa()
+            || $this->isTravelDocument1()
+            || $this->isFrenchId()
+            || $this->isTravelDocument2();
     }
 
     /**
