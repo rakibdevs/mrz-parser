@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Special Courtesy to @tetrahydra for Country Array
  * https://github.com/tetrahydra/SolidusMRZ
@@ -306,20 +308,37 @@ trait CountryMapper
     ];
 
     /**
-     * Map country name based on code
+     * Merged lookup table, built once per instance.
      *
-     * @param string|null $code
-     * @return string|null
+     * @var array<string, string>|null
      */
-    public function mapCountry(string $code = null): ?string
+    private ?array $countryMap = null;
+
+    /**
+     * Map country name based on code. Unknown / filler codes return null.
+     */
+    public function mapCountry(?string $code = null): ?string
     {
-        $allCountry = array_merge(
+        if ($code === null) {
+            return null;
+        }
+
+        $this->countryMap ??= array_merge(
             $this->countries,
             $this->nonIso3166,
             $this->unitedNations,
             $this->britishNations
         );
 
-        return (array_key_exists($code, $allCountry)) ? $allCountry[$code] : null;
+        return $this->countryMap[$code] ?? null;
+    }
+
+    /**
+     * Return the raw ISO 3166 alpha-3 code if it maps to a known country,
+     * otherwise null. Useful when the caller needs the code, not the name.
+     */
+    public function mapCountryCode(?string $code = null): ?string
+    {
+        return $this->mapCountry($code) === null ? null : $code;
     }
 }
