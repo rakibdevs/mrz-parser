@@ -23,3 +23,7 @@ const MRZ_TD1 = "I<UTOD231458907<<<<<<<<<<<<<<<\n"
 
 const MRZ_TD2 = "I<UTOERIKSSON<<ANNA<MARIA<<<<<<<<<<<\n"
     . 'D231458907UTO7408122F1204159<<<<<<<6';
+
+// French national ID (legacy 2x36). Specimen from GioviQ/MRZ, all check digits valid.
+const MRZ_FRENCH_ID = "IDFRADOUEL<<<<<<<<<<<<<<<<<<<<932013\n"
+    . '0506932020438CHRISTIANE<<NI2906209F3';
