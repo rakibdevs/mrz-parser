@@ -19,7 +19,11 @@
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.64",
+        "illuminate/support": "^10.0|^11.0|^12.0",
         "pestphp/pest": "^3.0"
+    },
+    "suggest": {
+        "illuminate/support": "Required to use the Laravel service provider and the ValidMrz validation rule."
     },
     "autoload": {
         "psr-4": {
@@ -40,6 +44,13 @@
         "sort-packages": true,
         "allow-plugins": {
             "pestphp/pest-plugin": true
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Rakibdevs\\MrzParser\\Laravel\\MrzParserServiceProvider"
+            ]
         }
     },
     "minimum-stability": "dev",
