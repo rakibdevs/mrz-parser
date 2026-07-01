@@ -14,7 +14,13 @@ All notable changes to `mrz-parser` will be documented in this file.
 
 - **ICAO 9303 check-digit validation.** Each result exposes an overall `valid` flag plus a per-field `validation` map (document number, date of birth, date of expiry, personal number, and composite).
 - Richer output: raw ISO alpha-3 codes (`issuer_code`, `nationality_code`), raw `sex` character, `optional_data`, and the normalized `raw` MRZ string.
-- A full Pest test suite (parsers, validator, check digits, date/gender/country mappers, name handling) with ~99% coverage.
+- **Typed `MrzResult` object** via `MrzParser::read()` — typed properties, `dateOfBirthAsDate()`/`dateOfExpiryAsDate()`, `isExpired()`, `fullName()`, and `toArray()`.
+- **Non-throwing entry points** `MrzParser::tryParse()` and `MrzParser::tryRead()` returning `null` on invalid input.
+- **Strict check-digit mode** (`parse($text, strict: true)`) throwing `InvalidChecksumException` when a check digit fails.
+- **Name transliteration** (`Support\Transliterator`): `fromLatin()` and `matches()` for converting/comparing accented names against the MRZ.
+- **French national ID** (2×36 legacy format) support.
+- **Laravel integration**: auto-discovered service provider and a `ValidMrz` validation rule.
+- A full Pest test suite (parsers, validator, check digits, mappers, DTO, transliteration, Laravel rule) with ~99% coverage.
 
 ### Fixed
 
