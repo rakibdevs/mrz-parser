@@ -1,30 +1,33 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Rakibdevs\MrzParser;
 
 use Rakibdevs\MrzParser\Enums\DocumentType;
 use Rakibdevs\MrzParser\Exceptions\InvalidFormatException;
+use Rakibdevs\MrzParser\Support\MrzNormalizer;
 
 class ValidateDocument
 {
-    protected $text;
+    protected string $text;
 
-    protected $documentType;
+    protected ?DocumentType $documentType = null;
 
-    protected $rows;
+    protected int $rows = 0;
 
-    protected $characterCountOfRow;
+    protected int $characterCountOfRow = 0;
 
-    protected $firstCharacter;
+    protected string $firstCharacter = '';
 
     public function __construct(?string $text = null)
     {
-        $this->text = $text;
+        $this->text = MrzNormalizer::normalize($text ?? '');
     }
 
-    protected function setProperties()
+    protected function setProperties(): self
     {
-        $rows = explode("\n", $this->text);
+        $rows = MrzNormalizer::rows($this->text);
         $this->rows = count($rows);
         $this->characterCountOfRow = isset($rows[0]) ? strlen($rows[0]) : 0;
         $this->firstCharacter = substr($this->text, 0, 1);
@@ -38,7 +41,7 @@ class ValidateDocument
      */
     protected function isPassport(): bool
     {
-        if ($this->rows == 2 && $this->firstCharacter == 'P' && $this->characterCountOfRow == 44) {
+        if ($this->rows === 2 && $this->firstCharacter === 'P' && $this->characterCountOfRow === 44) {
             $this->documentType = DocumentType::PASSPORT;
 
             return true;
@@ -53,7 +56,7 @@ class ValidateDocument
      */
     protected function isVisa(): bool
     {
-        if ($this->rows == 2 && $this->firstCharacter == 'V' && in_array($this->characterCountOfRow, [44, 36])) {
+        if ($this->rows === 2 && $this->firstCharacter === 'V' && in_array($this->characterCountOfRow, [44, 36], true)) {
             $this->documentType = DocumentType::VISA;
 
             return true;
@@ -68,7 +71,7 @@ class ValidateDocument
      */
     protected function isTravelDocument1(): bool
     {
-        if ($this->rows == 3 && in_array($this->firstCharacter, ["I", "A", "C"]) && $this->characterCountOfRow == 30) {
+        if ($this->rows === 3 && in_array($this->firstCharacter, ['I', 'A', 'C'], true) && $this->characterCountOfRow === 30) {
             $this->documentType = DocumentType::TRAVEL_DOCUMENT_1;
 
             return true;
@@ -83,7 +86,7 @@ class ValidateDocument
      */
     protected function isTravelDocument2(): bool
     {
-        if ($this->rows == 2 && in_array($this->firstCharacter, ["I", "P", "A", "C"]) && $this->characterCountOfRow == 36) {
+        if ($this->rows === 2 && in_array($this->firstCharacter, ['I', 'P', 'A', 'C'], true) && $this->characterCountOfRow === 36) {
             $this->documentType = DocumentType::TRAVEL_DOCUMENT_2;
 
             return true;
@@ -96,9 +99,8 @@ class ValidateDocument
      * Validate Document Based on Structure
      *
      * Reference: https://en.wikipedia.org/wiki/Machine-readable_passport
-     *
      */
-    protected function isValid()
+    protected function isValid(): bool
     {
         return $this->isPassport() || $this->isVisa() || $this->isTravelDocument1() || $this->isTravelDocument2();
     }
@@ -106,12 +108,12 @@ class ValidateDocument
     /**
      * Validate Machine Readable Zone from Document
      */
-    public function validate(): mixed
+    public function validate(): DocumentType
     {
         $this->setProperties();
 
         if (! $this->isValid()) {
-            throw new InvalidFormatException("The given input format is invalid!");
+            throw new InvalidFormatException('The given input format is invalid!');
         }
 
         return $this->documentType;
