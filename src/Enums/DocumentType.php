@@ -1,11 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Rakibdevs\MrzParser\Enums;
 
-abstract class DocumentType
+enum DocumentType: string
 {
-    public const PASSPORT = "passport";
-    public const VISA = "visa";
-    public const TRAVEL_DOCUMENT_1 = "travel_document_1";
-    public const TRAVEL_DOCUMENT_2 = "travel_document_2";
+    case PASSPORT = 'passport';
+    case VISA = 'visa';
+    case TRAVEL_DOCUMENT_1 = 'travel_document_1';
+    case TRAVEL_DOCUMENT_2 = 'travel_document_2';
+    case FRENCH_ID = 'french_id';
 }
