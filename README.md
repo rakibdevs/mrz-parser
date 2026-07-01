@@ -2,6 +2,10 @@
 # MRZ (Machine Readable Zones) Parser for PHP
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/rakibdevs/mrz-parser.svg?style=flat-square)](https://packagist.org/packages/rakibdevs/mrz-parser)
+[![Tests](https://img.shields.io/github/actions/workflow/status/rakibdevs/mrz-parser/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/rakibdevs/mrz-parser/actions/workflows/run-tests.yml)
+[![PHP Version](https://img.shields.io/packagist/dependency-v/rakibdevs/mrz-parser/php?style=flat-square)](https://packagist.org/packages/rakibdevs/mrz-parser)
+[![Total Downloads](https://img.shields.io/packagist/dt/rakibdevs/mrz-parser.svg?style=flat-square)](https://packagist.org/packages/rakibdevs/mrz-parser)
+[![License](https://img.shields.io/packagist/l/rakibdevs/mrz-parser.svg?style=flat-square)](LICENSE.md)
 
 
 A PHP package for MRZ (Machine Readable Zones) code parser for Passport, Visa & Travel Document (TD1 & TD2).
@@ -68,6 +72,66 @@ Every result carries a `valid` flag (overall) and a `validation` map with the ou
 
 Input is normalized before parsing: `\r\n` / `\r` line endings are converted to `\n`, surrounding whitespace is trimmed, and blank lines are dropped — so MRZ strings copied from Windows or OCR output parse the same as clean input. Dates are validated strictly (impossible dates such as Feb 30 return `null`), and a date of birth that would resolve to the future is shifted back a century.
 
+## Advanced usage
+
+### Typed result object
+
+`read()` returns an `MrzResult` value object with typed properties and helpers, while `toArray()` gives you the same array as `parse()`:
+
+```php
+$mrz = MrzParser::read($text);
+
+$mrz->cardNo;                    // 'L898902C3'
+$mrz->fullName();                // 'ANNA MARIA ERIKSSON'
+$mrz->dateOfBirthAsDate();       // DateTimeImmutable
+$mrz->isExpired();               // bool (or null when the format has no expiry)
+$mrz->valid;                     // bool
+$mrz->toArray();                 // the canonical parse() array
+```
+
+### Non-throwing parsing
+
+`parse()`/`read()` throw on unrecognised input. Use the `try*` variants to get `null` instead:
+
+```php
+MrzParser::tryParse($text);      // ?array
+MrzParser::tryRead($text);       // ?MrzResult
+```
+
+### Strict check-digit mode
+
+Pass `strict: true` to reject documents whose check digits don't verify (throws `InvalidChecksumException`; the `try*` variants return `null`):
+
+```php
+MrzParser::parse($text, strict: true);
+MrzParser::read($text, strict: true);
+```
+
+### Name transliteration
+
+The MRZ name field only holds `A–Z`. Convert a visual-zone (accented) name to its MRZ form, or compare the two:
+
+```php
+use Rakibdevs\MrzParser\Support\Transliterator;
+
+Transliterator::fromLatin('Müller');            // 'MUELLER'
+Transliterator::fromLatin('Jørgensen');         // 'JOERGENSEN'
+Transliterator::matches('MUELLER', 'Müller');   // true
+```
+
+### Laravel
+
+The package ships an auto-discovered service provider and a validation rule (requires `illuminate/support`):
+
+```php
+use Rakibdevs\MrzParser\Laravel\Rules\ValidMrz;
+
+$request->validate([
+    'mrz' => [new ValidMrz()],              // must be a parseable MRZ
+    'mrz' => [new ValidMrz(strict: true)],  // ...with valid check digits
+]);
+```
+
 ## Supported Document
 #### [Passport (TD3)](https://www.icao.int/publications/Documents/9303_p4_cons_en.pdf)
 ```
@@ -95,6 +159,13 @@ ERIKSSON<<ANNA<MARIA<<<<<<<<<<
 ```
 I<UTOERIKSSON<<ANNA<MARIA<<<<<<<<<<<
 D231458907UTO7408122F1204159<<<<<<<6
+```
+
+#### French National ID (legacy 2×36 Carte Nationale d'Identité)
+This pre-2021 format predates ICAO TD1/TD2 and has its own layout (no expiry date is encoded).
+```
+IDFRADOUEL<<<<<<<<<<<<<<<<<<<<932013
+0506932020438CHRISTIANE<<NI2906209F3
 ```
 
 
