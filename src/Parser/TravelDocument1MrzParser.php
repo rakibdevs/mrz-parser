@@ -1,27 +1,31 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Rakibdevs\MrzParser\Parser;
 
 use Rakibdevs\MrzParser\Contracts\ParserInterface;
+use Rakibdevs\MrzParser\Support\CheckDigit;
+use Rakibdevs\MrzParser\Support\MrzNormalizer;
 use Rakibdevs\MrzParser\Traits\CountryMapper;
 use Rakibdevs\MrzParser\Traits\DateFormatter;
 use Rakibdevs\MrzParser\Traits\GenderMapper;
+use Rakibdevs\MrzParser\Traits\NameFormatter;
 
 class TravelDocument1MrzParser implements ParserInterface
 {
     use DateFormatter;
     use GenderMapper;
     use CountryMapper;
+    use NameFormatter;
 
-    protected $text;
+    protected string $text = '';
 
-    protected $firstLine;
+    protected string $firstLine = '';
 
-    protected $secondLine;
+    protected string $secondLine = '';
 
-    protected $thirdLine;
-
-    protected $nameString;
+    protected string $thirdLine = '';
 
     /**
      * Example String
@@ -33,14 +37,11 @@ class TravelDocument1MrzParser implements ParserInterface
      */
     protected function setText(string $text): self
     {
-        $this->text = $text;
+        $this->text = MrzNormalizer::normalize($text);
 
         return $this;
     }
 
-    /**
-     * Set Name String
-     */
     protected function setNameString(): self
     {
         $this->nameString = explode('<<', $this->thirdLine);
@@ -48,147 +49,143 @@ class TravelDocument1MrzParser implements ParserInterface
         return $this;
     }
 
-    /**
-     * Extract information
-     */
     protected function extract(): self
     {
-        $text = explode("\n", $this->text);
-        $this->firstLine = $text[0] ?? null;
-        $this->secondLine = $text[1] ?? null;
-        $this->thirdLine = $text[2] ?? null;
+        $rows = MrzNormalizer::rows($this->text);
+        $this->firstLine = $rows[0] ?? '';
+        $this->secondLine = $rows[1] ?? '';
+        $this->thirdLine = $rows[2] ?? '';
         $this->setNameString();
 
         return $this;
     }
 
     /**
-     * Get Type beased on first two string
-     *
-     * Type, This is at the discretion of the issuing state or authority,
-     * but 1–2 should be AC for Crew Member Certificates and V is not allowed as 2nd character.
-     * ID or I< are typically used for nationally issued ID cards and IP for passport cards.
+     * Type is at the discretion of the issuing state. 1–2 is AC for Crew
+     * Member Certificates; ID / I< for national ID cards; IP for passport cards.
      */
-    protected function getType()
+    protected function getType(): string
     {
-        $firstTwoCharacter = substr($this->firstLine, 0, 2);
-
-        return match ($firstTwoCharacter) {
+        return match (substr($this->firstLine, 0, 2)) {
             'AC' => 'Crew Member Certificates',
             'I<' => 'National ID',
             'IP' => 'Passport',
-            default => "Travel Document (TD1)"
+            default => 'Travel Document (TD1)',
         };
     }
 
     /**
      * Get Document Number
-     * 6–14	alpha+num+<	Document number
+     * First row 6–14 alpha+num+< Document number
      */
     protected function getCardNo(): ?string
     {
-        $cardNo = substr($this->firstLine, 5, 9);
-        $cardNo = chop($cardNo, "<"); // remove extra '<' from card no
-
-        return $cardNo;
+        return rtrim(substr($this->firstLine, 5, 9), '<') ?: null;
     }
 
-    /**
-     * Get Document Issuer
-     */
     protected function getIssuer(): ?string
     {
-        $issuer = chop(substr($this->firstLine, 2, 3), "<");
+        return $this->mapCountry($this->getIssuerCode());
+    }
 
-        return $this->mapCountry($issuer);
+    protected function getIssuerCode(): ?string
+    {
+        return rtrim(substr($this->firstLine, 2, 3), '<') ?: null;
     }
 
     /**
      * Get Date of Expiry
-     * Second row 9-14	character: (YYMMDD)
+     * Second row 9-14 character: (YYMMDD)
      */
     protected function getDateOfExpiry(): ?string
     {
-        $date = substr($this->secondLine, 8, 6);
-
-        return $date ? $this->formatDate($date) : null;
+        return $this->formatDate(substr($this->secondLine, 8, 6));
     }
 
     /**
      * Get Date of Birth
-     * Second row 1-6	character: (YYMMDD)
+     * Second row 1-6 character: (YYMMDD)
      */
     protected function getDateOfBirth(): ?string
     {
-        $date = substr($this->secondLine, 0, 6);
-
-        return $date ? $this->formatDate($date) : null;
+        return $this->formatDate(substr($this->secondLine, 0, 6), 'Y-m-d', true);
     }
 
-    /**
-     * Get First Name from Name String
-     *
-     * <<ANNA<MARIA<<<<<<<<<<
-     */
-    protected function getFirstName(): ?string
-    {
-        return isset($this->nameString[1]) ? str_replace("<", " ", $this->nameString[1]) : null;
-    }
-
-    /**
-     * Get Last Name from Name String
-     */
-    protected function getLastName(): ?string
-    {
-        return $this->nameString[0] ?? null;
-    }
-
-    /**
-     * Get Gender
-     * Position 8, M/F/<
-     *
-     */
     protected function getGender(): ?string
     {
         return $this->mapGender(substr($this->secondLine, 7, 1));
     }
 
-    /**
-     * Get Nationality
-     */
+    protected function getSex(): ?string
+    {
+        $sex = substr($this->secondLine, 7, 1);
+
+        return in_array($sex, ['M', 'F'], true) ? $sex : null;
+    }
+
     protected function getNationality(): ?string
     {
-        $code = chop(substr($this->secondLine, 15, 3), "<");
+        return $this->mapCountry($this->getNationalityCode());
+    }
 
-        return $this->mapCountry($code);
+    protected function getNationalityCode(): ?string
+    {
+        return rtrim(substr($this->secondLine, 15, 3), '<') ?: null;
+    }
+
+    protected function getOptionalData(): ?string
+    {
+        return rtrim(substr($this->firstLine, 15, 15), '<') ?: null;
     }
 
     /**
-     * Get Output from MRZ
+     * Verify the ICAO 9303 TD1 check digits (document number on line 1, date
+     * of birth / expiry on line 2, and the composite over all fields).
      *
-     * @return array
+     * @return array<string, bool>
      */
+    protected function getValidation(): array
+    {
+        $line1 = $this->firstLine;
+        $line2 = $this->secondLine;
+
+        $composite = substr($line1, 5, 25)
+            . substr($line2, 0, 7)
+            . substr($line2, 8, 7)
+            . substr($line2, 18, 11);
+
+        return [
+            'card_no' => CheckDigit::verify(substr($line1, 5, 9), substr($line1, 14, 1)),
+            'date_of_birth' => CheckDigit::verify(substr($line2, 0, 6), substr($line2, 6, 1)),
+            'date_of_expiry' => CheckDigit::verify(substr($line2, 8, 6), substr($line2, 14, 1)),
+            'composite' => CheckDigit::verify($composite, substr($line2, 29, 1)),
+        ];
+    }
+
     protected function get(): array
     {
+        $validation = $this->getValidation();
+
         return [
             'type' => $this->getType(),
             'card_no' => $this->getCardNo(),
             'issuer' => $this->getIssuer(),
+            'issuer_code' => $this->getIssuerCode(),
             'date_of_expiry' => $this->getDateOfExpiry(),
-            'first_name' => $this->getFirstName(),
-            'last_name' => $this->getLastName(),
+            'first_name' => $this->firstNameFromNameString(),
+            'last_name' => $this->lastNameFromNameString(),
             'date_of_birth' => $this->getDateOfBirth(),
             'gender' => $this->getGender(),
+            'sex' => $this->getSex(),
+            'optional_data' => $this->getOptionalData(),
             'nationality' => $this->getNationality(),
+            'nationality_code' => $this->getNationalityCode(),
+            'valid' => ! in_array(false, $validation, true),
+            'validation' => $validation,
+            'raw' => $this->text,
         ];
     }
 
-    /**
-     * Parse MRZ to Json Data
-     *
-     * @param string $text
-     * @return null|array
-     */
     public function parse(string $text): ?array
     {
         return $this
