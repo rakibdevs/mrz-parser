@@ -110,9 +110,15 @@ class VisaMrzParser implements ParserInterface
         return rtrim(substr($this->secondLine, 10, 3), '<') ?: null;
     }
 
+    /**
+     * Optional data starts at position 29 (index 28) and runs to the end of
+     * the line: 16 characters on an MRV-A (44), 8 on an MRV-B (36).
+     */
     protected function getOptionalData(): ?string
     {
-        return rtrim(substr($this->secondLine, 28), '<') ?: null;
+        $length = strlen($this->secondLine) === 36 ? 8 : 16;
+
+        return rtrim(substr($this->secondLine, 28, $length), '<') ?: null;
     }
 
     /**
